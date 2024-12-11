@@ -10,13 +10,16 @@ AnimatedButton::AnimatedButton(std::string pathToSprites, int countOfSprites, co
 }
 
 void AnimatedButton::update(float deltaTime) {
-    if (isPressed) {
+    if (isPressed && currentFrame != frames.size()-1) {
         frameTime += deltaTime;
         if (frameTime >= frameDuration) {
             frameTime = 0;
             currentFrame = (currentFrame + 1) % frames.size();
             sprite.setTexture(frames[currentFrame]);
         }
+    }
+    else if (isPressed && currentFrame == frames.size() - 1) {
+        sprite.setTexture(frames[frames.size() - 1]);
     }
     else {
         sprite.setTexture(frames[0]);
