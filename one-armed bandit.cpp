@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int main()
 {
     sf::RenderWindow window(sf::VideoMode(widthWindow, heightWindow), "one-armed bandit", sf::Style::Close);
 
@@ -19,6 +19,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         static_cast<float>(windowSize.y) / interfaceTexture.getSize().y
     );
 
+    AnimatedButton startButton("images/startButton", 3, sf::Vector2f(810, 100), []() {
+        std::cout << "Start button clicked!" << std::endl;
+        });
+    AnimatedButton stopButton("images/stopButton", 3, sf::Vector2f(810, 150), []() {
+        std::cout << "Stop button clicked!" << std::endl;
+        });
+    sf::Clock clock;
+
     // Основной цикл
     while (window.isOpen()) {
         sf::Event event;
@@ -26,10 +34,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    startButton.handleClick(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+                    stopButton.handleClick(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+                }
+            }
+            if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    startButton.release();
+                    stopButton.release();
+                }
+            }
         }
 
+        float deltaTime = clock.restart().asSeconds();
+        startButton.update(deltaTime);
+        stopButton.update(deltaTime);
+
         window.clear();
-        window.draw(interfaceSprite);
+        window.draw(interfaceSprite); // добавление фона
+        startButton.render(window);  // добавление кнопки старт
+        stopButton.render(window);  // добавление кнопки стоп
         window.display();
     }
 

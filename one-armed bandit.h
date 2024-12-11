@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <iostream>
+#include "button.h"
 #include <SFML/Graphics.hpp>
 
 const int widthWindow = 960;
