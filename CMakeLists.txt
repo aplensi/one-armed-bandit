@@ -12,7 +12,7 @@ set(SFML_DIR "${CMAKE_SOURCE_DIR}/SFML/lib/cmake/SFML")
 
 find_package(SFML 2.6.2 COMPONENTS graphics window system REQUIRED)
 
-add_executable (CMakeTarget "one-armed bandit.cpp" "one-armed bandit.h" "button.cpp" "button.h")
+add_executable (CMakeTarget "one-armed bandit.cpp" "one-armed bandit.h" "button.cpp" "button.h" "roulette.cpp" "roulette.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)
