@@ -25,7 +25,7 @@ private:
     int currentFrame = 0, countOfSprites;
     bool isPressed = false;
     float frameTime = 0.0f;
-    const float frameDuration = 0.08f;
+    const float frameDuration = 0.06f;
     std::string pathToSprites;
     std::function<void()> onClick;
 

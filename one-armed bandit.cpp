@@ -19,10 +19,10 @@ int main()
         static_cast<float>(windowSize.y) / interfaceTexture.getSize().y
     );
 
-    AnimatedButton startButton("images/startButton", 3, sf::Vector2f(810, 100), []() {
+    AnimatedButton startButton("images/startButton", 4, sf::Vector2f(810, 100), []() {
         std::cout << "Start button clicked!" << std::endl;
         });
-    AnimatedButton stopButton("images/stopButton", 3, sf::Vector2f(810, 150), []() {
+    AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), []() {
         std::cout << "Stop button clicked!" << std::endl;
         });
     sf::Clock clock;
