@@ -1,6 +1,6 @@
 #include "roulette.h"
 
-roulette::roulette(std::string path, int numb, int startPosX, int startPosY) : 
+roulette::roulette(std::string path, int numb, float startPosX, float startPosY) :
 	numb(numb), startPosX(startPosX), startPosY(startPosY)
 {
 	std::random_device rd;
@@ -13,6 +13,10 @@ roulette::roulette(std::string path, int numb, int startPosX, int startPosY) :
 	}
 	std::shuffle(items.begin(), items.end(), gen);
 
+	for (int i = 0; i < items.size(); i++)
+	{
+		items[i].position(startPosX, (i * startPosY) - 60);
+	}
 	
 }
 
@@ -21,13 +25,15 @@ void roulette::render(sf::RenderWindow& window)
 	for (int i = 0; i < items.size(); i++)
 	{
 		items[i].render(window);
-		items[i].position(startPosX, (i * startPosY) - 60);
 	}
 }
 
 void roulette::move(float deltaTime, float speed)
 {
-
+	for (int i = 0; i < items.size(); i++)
+	{
+		items[i].move(deltaTime, speed);
+	}
 }
 
 itemOfRoulette::itemOfRoulette(std::string path, float size, int numb) :
@@ -55,6 +61,6 @@ void itemOfRoulette::move(float deltaTime, float speed)
 	sprite->move(0, speed * deltaTime);
 	if (sprite->getPosition().y > 540)
 	{
-		sprite->setPosition(x, y);
+		sprite->setPosition(x,  -300);
 	}
 }

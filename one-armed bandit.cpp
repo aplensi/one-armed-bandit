@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(widthWindow, heightWindow), "one-armed bandit", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(widthWindow, heightWindow), "one-armed bandit");
 
     if (!interfaceTexture.loadFromFile("images/menuOfOne-armedBandit.png")){
         return -1;
@@ -19,13 +19,19 @@ int main()
         static_cast<float>(windowSize.y) / interfaceTexture.getSize().y
     );
 
-    AnimatedButton startButton("images/startButton", 4, sf::Vector2f(810, 100), []() {
+    AnimatedButton startButton("images/startButton", 4, sf::Vector2f(810, 100), [&]() {
         std::cout << "Start button clicked!" << std::endl;
+        speedOfRoulette = 300;
         });
-    AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), []() {
+    AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), [&]() {
         std::cout << "Stop button clicked!" << std::endl;
+        speedOfRoulette = 0;
         });
     sf::Clock clock;
+
+    roulette column1("images/itemOfRoulette", 5, 97, 230);
+    roulette column2("images/itemOfRoulette", 5, 327, 230);
+    roulette column3("images/itemOfRoulette", 5, 557, 230);
 
     // Основной цикл
     while (window.isOpen()) {
@@ -53,6 +59,14 @@ int main()
         stopButton.update(deltaTime);
 
         window.clear();
+        column1.move(deltaTime, speedOfRoulette);
+        column2.move(deltaTime, speedOfRoulette);
+        column3.move(deltaTime, speedOfRoulette);
+
+        window.clear(sf::Color(242, 204, 143));
+        column1.render(window);
+        column2.render(window);
+        column3.render(window);
         window.draw(interfaceSprite); // добавление фона
         startButton.render(window);  // добавление кнопки старт
         stopButton.render(window);  // добавление кнопки стоп

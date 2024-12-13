@@ -21,12 +21,12 @@ private:
 
 class roulette {
 public:
-	roulette(std::string path, int numb, int startPosX, int startPosY);
+	roulette(std::string path, int numb, float startPosX, float startPosY);
 	void render(sf::RenderWindow& window);
 	void move(float deltaTime, float speed);
 private:
 	int numb, startPosX, startPosY;
-	float speedOfScroll;
+	float speedOfScroll = 0;
 	std::vector<itemOfRoulette> items;
 	std::string path;
 };
