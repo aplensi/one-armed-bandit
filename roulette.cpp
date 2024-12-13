@@ -1,7 +1,7 @@
 #include "roulette.h"
 
-roulette::roulette(std::string path, int numb, float startPosX, float startPosY, int indent) :
-	numb(numb), startPosX(startPosX), startPosY(startPosY)
+roulette::roulette(std::string path, int numb, float startPosX, float startPosY, float indent) :
+	numb(numb), startPosX(startPosX), startPosY(startPosY), indent(indent)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -38,6 +38,29 @@ void roulette::move(float deltaTime, float speed)
 	}
 }
 
+void roulette::rouletteIsStopped(int PosOfCenter)
+{
+	for (int i = 0; i < items.size(); i++)
+	{
+		if (items[i].getYPosition() <= PosOfCenter + items[i].getSizeOfItem() / 2 + indent / 2 && items[i].getYPosition() >= PosOfCenter - items[i].getSizeOfItem() / 2 - indent / 2) {
+			std::cout << items[i].getName() << " | " << items[i].getXPosition() << " : " << items[i].getYPosition() << std::endl;
+			if (items[i].getYPosition() < PosOfCenter)
+			{
+				float difference = PosOfCenter - items[i].getYPosition();
+				for (int j = 0; j < items.size(); j++) {
+					items[j].position(startPosX, items[j].getYPosition() + difference);
+				}
+			}
+			else {
+				float difference = items[i].getYPosition() - PosOfCenter;
+				for (int j = 0; j < items.size(); j++) {
+					items[j].position(startPosX, items[j].getYPosition() - difference);
+				}
+			}
+		}
+	}
+}
+
 itemOfRoulette::itemOfRoulette(std::string path, float size, int numb) :
 	path(path), size(size), numb(numb)
 {
@@ -61,6 +84,13 @@ void itemOfRoulette::position(float x, float y, int endOfColumn, int startOfColu
 	sprite->setPosition(x, y);
 }
 
+void itemOfRoulette::position(float x, float y)
+{
+	this->x = x;
+	this->y = y;
+	sprite->setPosition(x, y);
+}
+
 void itemOfRoulette::move(float deltaTime, float speed)
 {
 	sprite->move(0, speed * deltaTime);
@@ -74,8 +104,23 @@ void itemOfRoulette::move(float deltaTime, float speed)
 	}
 }
 
-int itemOfRoulette::getSizeOfItem()
+float itemOfRoulette::getSizeOfItem()
 {
 	sf::FloatRect bounds = sprite->getGlobalBounds();
 	return bounds.height;
+}
+
+float itemOfRoulette::getYPosition()
+{
+	return sprite->getPosition().y;
+}
+
+float itemOfRoulette::getXPosition()
+{
+	return sprite->getPosition().x;
+}
+
+std::string itemOfRoulette::getName()
+{
+	return path + std::to_string(numb);
 }

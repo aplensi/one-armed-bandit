@@ -36,14 +36,20 @@ int main()
         speedOfRoulete3 = distr(gen);
         scrollTimer.restart();
         });
-    AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), [&]() {
-        std::cout << "Stop button clicked!" << std::endl;
-        isRouletteEnabled = false;
-        });
+
 
     roulette column1("images/itemOfRoulette", 5, 97, -290, 6);
     roulette column2("images/itemOfRoulette", 5, 327, -290, 6);
     roulette column3("images/itemOfRoulette", 5, 557, -290, 6);
+
+
+    AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), [&]() {
+        std::cout << "Stop button clicked!" << std::endl;
+        isRouletteEnabled = false;
+        column1.rouletteIsStopped(170);
+        column2.rouletteIsStopped(170);
+        column3.rouletteIsStopped(170);
+        });
 
     // Основной цикл
     while (window.isOpen()) {
@@ -84,6 +90,9 @@ int main()
             sf::Time elapsed = scrollTimer.getElapsedTime();
             if (elapsed.asSeconds() >= timeOfScroll) {
                 isRouletteEnabled = false;
+                column1.rouletteIsStopped(170);
+                column2.rouletteIsStopped(170);
+                column3.rouletteIsStopped(170);
             }
         }
         else {
