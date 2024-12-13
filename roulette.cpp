@@ -15,7 +15,7 @@ roulette::roulette(std::string path, int numb, float startPosX, float startPosY)
 
 	for (int i = 0; i < items.size(); i++)
 	{
-		items[i].position(startPosX, (i * startPosY) - 60);
+		items[i].position(startPosX, (i * startPosY) - 240);
 	}
 	
 }
@@ -59,8 +59,8 @@ void itemOfRoulette::position(float x, float y)
 void itemOfRoulette::move(float deltaTime, float speed)
 {
 	sprite->move(0, speed * deltaTime);
-	if (sprite->getPosition().y > 540)
+	if (sprite->getPosition().y > 910)
 	{
-		sprite->setPosition(x,  -300);
+		sprite->setPosition(x,  -240);
 	}
 }
