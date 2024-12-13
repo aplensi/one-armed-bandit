@@ -19,19 +19,31 @@ int main()
         static_cast<float>(windowSize.y) / interfaceTexture.getSize().y
     );
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(1000, 2500);
+    int speedOfRoulete1;
+    int speedOfRoulete2;
+    int speedOfRoulete3;
+
+    sf::Clock clock, scrollTimer;
+
     AnimatedButton startButton("images/startButton", 4, sf::Vector2f(810, 100), [&]() {
         std::cout << "Start button clicked!" << std::endl;
-        speedOfRoulette = 300;
+        isRouletteEnabled = true;
+        speedOfRoulete1 = distr(gen);
+        speedOfRoulete2 = distr(gen);
+        speedOfRoulete3 = distr(gen);
+        scrollTimer.restart();
         });
     AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), [&]() {
         std::cout << "Stop button clicked!" << std::endl;
-        speedOfRoulette = 0;
+        isRouletteEnabled = false;
         });
-    sf::Clock clock;
 
-    roulette column1("images/itemOfRoulette", 5, 97, 230);
-    roulette column2("images/itemOfRoulette", 5, 327, 230);
-    roulette column3("images/itemOfRoulette", 5, 557, 230);
+    roulette column1("images/itemOfRoulette", 5, 97, -290, 6);
+    roulette column2("images/itemOfRoulette", 5, 327, -290, 6);
+    roulette column3("images/itemOfRoulette", 5, 557, -290, 6);
 
     // Основной цикл
     while (window.isOpen()) {
@@ -42,8 +54,12 @@ int main()
             }
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    startButton.handleClick(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
-                    stopButton.handleClick(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+                    if (isRouletteEnabled == false){
+                        startButton.handleClick(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+                    }
+                    if (isRouletteEnabled == true) {
+                        stopButton.handleClick(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+                    }
                 }
             }
             if (event.type == sf::Event::MouseButtonReleased) {
@@ -59,11 +75,25 @@ int main()
         stopButton.update(deltaTime);
 
         window.clear();
-        column1.move(deltaTime, speedOfRoulette);
-        column2.move(deltaTime, speedOfRoulette);
-        column3.move(deltaTime, speedOfRoulette);
+        if (isRouletteEnabled == true)
+        {
+            column1.move(deltaTime, speedOfRoulete1);
+            column2.move(deltaTime, speedOfRoulete2);
+            column3.move(deltaTime, speedOfRoulete3);
+
+            sf::Time elapsed = scrollTimer.getElapsedTime();
+            if (elapsed.asSeconds() >= timeOfScroll) {
+                isRouletteEnabled = false;
+            }
+        }
+        else {
+            speedOfRoulete1 = 0;
+            speedOfRoulete2 = 0;
+            speedOfRoulete3 = 0;
+        }
 
         window.clear(sf::Color(242, 204, 143));
+        
         column1.render(window);
         column2.render(window);
         column3.render(window);

@@ -1,6 +1,6 @@
 #include "roulette.h"
 
-roulette::roulette(std::string path, int numb, float startPosX, float startPosY) :
+roulette::roulette(std::string path, int numb, float startPosX, float startPosY, int indent) :
 	numb(numb), startPosX(startPosX), startPosY(startPosY)
 {
 	std::random_device rd;
@@ -13,11 +13,13 @@ roulette::roulette(std::string path, int numb, float startPosX, float startPosY)
 	}
 	std::shuffle(items.begin(), items.end(), gen);
 
+	int sizeOfItem = items[0].getSizeOfItem();
+	int endOfColumn = startPosY + (sizeOfItem + indent) * items.size();
+
 	for (int i = 0; i < items.size(); i++)
 	{
-		items[i].position(startPosX, (i * startPosY) - 240);
+		items[i].position(startPosX, startPosY + (sizeOfItem+indent) * i, endOfColumn, startPosY);
 	}
-	
 }
 
 void roulette::render(sf::RenderWindow& window)
@@ -42,6 +44,7 @@ itemOfRoulette::itemOfRoulette(std::string path, float size, int numb) :
 	texture->loadFromFile(path + std::to_string(numb) + std::string(".png"));
 	sprite->setTexture(*texture);
 	sprite->setScale(size, size);
+	
 }
 
 void itemOfRoulette::render(sf::RenderWindow& window)
@@ -49,8 +52,10 @@ void itemOfRoulette::render(sf::RenderWindow& window)
 	window.draw(*sprite);
 }
 
-void itemOfRoulette::position(float x, float y)
+void itemOfRoulette::position(float x, float y, int endOfColumn, int startOfColumn)
 {
+	this->endOfColumn = endOfColumn;
+	this->startOfColumn = startOfColumn;
 	this->x = x;
 	this->y = y;
 	sprite->setPosition(x, y);
@@ -59,8 +64,18 @@ void itemOfRoulette::position(float x, float y)
 void itemOfRoulette::move(float deltaTime, float speed)
 {
 	sprite->move(0, speed * deltaTime);
-	if (sprite->getPosition().y > 910)
+	if (sprite->getPosition().y > endOfColumn)
 	{
-		sprite->setPosition(x,  -240);
+		sprite->setPosition(x,  startOfColumn);
 	}
+	else if (sprite->getPosition().y < startOfColumn)
+	{
+		sprite->setPosition(x, endOfColumn);
+	}
+}
+
+int itemOfRoulette::getSizeOfItem()
+{
+	sf::FloatRect bounds = sprite->getGlobalBounds();
+	return bounds.height;
 }
