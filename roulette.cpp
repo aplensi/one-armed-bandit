@@ -49,12 +49,14 @@ void roulette::rouletteIsStopped(int PosOfCenter)
 				float difference = PosOfCenter - items[i].getYPosition();
 				for (int j = 0; j < items.size(); j++) {
 					items[j].position(startPosX, items[j].getYPosition() + difference);
+					items[j].move(0, 0);
 				}
 			}
 			else {
 				float difference = items[i].getYPosition() - PosOfCenter;
 				for (int j = 0; j < items.size(); j++) {
 					items[j].position(startPosX, items[j].getYPosition() - difference);
+					items[j].move(0, 0);
 				}
 			}
 		}
