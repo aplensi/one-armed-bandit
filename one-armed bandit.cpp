@@ -2,8 +2,30 @@
 
 using namespace std;
 
+void win(int res1, int res2, int res3, int& balance) {
+    if (res1 == res2 && res1 == res3) {
+        if (res1 == 1) {
+            balance += 1000;
+        }
+        else if (res1 == 2) {
+            balance += 800;
+        }
+        else if (res1 == 3) {
+            balance += 600;
+        }
+        else if (res1 == 4) {
+            balance += 400;
+        }
+        else {
+            balance += 200;
+        }
+        std::cout << "Congratulations! Your balance: " << balance << endl;
+    }
+}
+
 int main()
 {
+    std::cout << "stars: 1000 | apples: 800 | oranges: 600 | bananas: 400 | watermelons: 200\n";
     sf::RenderWindow window(sf::VideoMode(widthWindow, heightWindow), "one-armed bandit");
 
     if (!interfaceTexture.loadFromFile("images/menuOfOne-armedBandit.png")){
@@ -29,7 +51,6 @@ int main()
     sf::Clock clock, scrollTimer;
 
     AnimatedButton startButton("images/startButton", 4, sf::Vector2f(810, 100), [&]() {
-        std::cout << "Start button clicked!" << std::endl;
         isRouletteEnabled = true;
         speedOfRoulete1 = distr(gen);
         speedOfRoulete2 = distr(gen);
@@ -44,11 +65,8 @@ int main()
 
 
     AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), [&]() {
-        std::cout << "Stop button clicked!" << std::endl;
         isRouletteEnabled = false;
-        column1.rouletteIsStopped(170);
-        column2.rouletteIsStopped(170);
-        column3.rouletteIsStopped(170);
+        win(column1.rouletteIsStopped(170), column2.rouletteIsStopped(170), column3.rouletteIsStopped(170), balance);
         });
 
     // Основной цикл
@@ -90,9 +108,7 @@ int main()
             sf::Time elapsed = scrollTimer.getElapsedTime();
             if (elapsed.asSeconds() >= timeOfScroll) {
                 isRouletteEnabled = false;
-                column1.rouletteIsStopped(170);
-                column2.rouletteIsStopped(170);
-                column3.rouletteIsStopped(170);
+                win(column1.rouletteIsStopped(170), column2.rouletteIsStopped(170), column3.rouletteIsStopped(170), balance);
             }
         }
         else {

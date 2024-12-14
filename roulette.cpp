@@ -38,27 +38,26 @@ void roulette::move(float deltaTime, float speed)
 	}
 }
 
-void roulette::rouletteIsStopped(float PosOfCenter)
+int roulette::rouletteIsStopped(float PosOfCenter)
 {
 	for (int i = 0; i < items.size(); i++)
 	{
 		if (items[i].getYPosition() < PosOfCenter + items[i].getSizeOfItem() / 2 + indent / 2 && items[i].getYPosition() > PosOfCenter - items[i].getSizeOfItem() / 2 - indent / 2) {
-			std::cout << items[i].getName() << " | " << items[i].getXPosition() << " : " << items[i].getYPosition() << std::endl;
+			//std::cout << items[i].getName() << " | " << items[i].getXPosition() << " : " << items[i].getYPosition() << std::endl;
 			if (items[i].getYPosition() < PosOfCenter)
 			{
 				float difference = PosOfCenter - items[i].getYPosition();
 				for (int j = 0; j < items.size(); j++) {
 					items[j].position(startPosX, items[j].getYPosition() + difference);
-					//items[j].transfer();
 				}
 			}
 			else {
 				float difference = items[i].getYPosition() - PosOfCenter;
 				for (int j = 0; j < items.size(); j++) {
 					items[j].position(startPosX, items[j].getYPosition() - difference);
-					//items[j].transfer();
 				}
 			}
+			return items[i].getNumb();
 		}
 	}
 }
@@ -121,4 +120,9 @@ float itemOfRoulette::getXPosition()
 std::string itemOfRoulette::getName()
 {
 	return path + std::to_string(numb);
+}
+
+int itemOfRoulette::getNumb()
+{
+	return numb;
 }

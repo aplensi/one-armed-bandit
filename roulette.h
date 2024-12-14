@@ -16,6 +16,7 @@ public:
 	float getYPosition();
 	float getXPosition();
 	std::string getName();
+	int getNumb();
 private:
 	std::string path;
 	float size, x, y;
@@ -29,7 +30,7 @@ public:
 	roulette(std::string path, int numb, float startPosX, float startPosY, float indent);
 	void render(sf::RenderWindow& window);
 	void move(float deltaTime, float speed);
-	void rouletteIsStopped(float PosOfCenter);
+	int rouletteIsStopped(float PosOfCenter);
 private:
 	int numb, startPosX, startPosY;
 	float speedOfScroll = 0, indent;

@@ -12,5 +12,7 @@ const int heightWindow = 540;
 bool isRouletteEnabled = false;
 float timeOfScroll = 2;
 
+int balance = 0;
+
 sf::Texture interfaceTexture;
 sf::Sprite interfaceSprite;
