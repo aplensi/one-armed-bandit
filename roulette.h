@@ -29,7 +29,7 @@ public:
 	roulette(std::string path, int numb, float startPosX, float startPosY, float indent);
 	void render(sf::RenderWindow& window);
 	void move(float deltaTime, float speed);
-	void rouletteIsStopped(int PosOfCenter);
+	void rouletteIsStopped(float PosOfCenter);
 private:
 	int numb, startPosX, startPosY;
 	float speedOfScroll = 0, indent;

@@ -21,7 +21,7 @@ int main()
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(1000, 2500);
+    std::uniform_int_distribution<> distr(1500, 3000);
     int speedOfRoulete1;
     int speedOfRoulete2;
     int speedOfRoulete3;

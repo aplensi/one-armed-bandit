@@ -38,25 +38,25 @@ void roulette::move(float deltaTime, float speed)
 	}
 }
 
-void roulette::rouletteIsStopped(int PosOfCenter)
+void roulette::rouletteIsStopped(float PosOfCenter)
 {
 	for (int i = 0; i < items.size(); i++)
 	{
-		if (items[i].getYPosition() <= PosOfCenter + items[i].getSizeOfItem() / 2 + indent / 2 && items[i].getYPosition() >= PosOfCenter - items[i].getSizeOfItem() / 2 - indent / 2) {
+		if (items[i].getYPosition() < PosOfCenter + items[i].getSizeOfItem() / 2 + indent / 2 && items[i].getYPosition() > PosOfCenter - items[i].getSizeOfItem() / 2 - indent / 2) {
 			std::cout << items[i].getName() << " | " << items[i].getXPosition() << " : " << items[i].getYPosition() << std::endl;
 			if (items[i].getYPosition() < PosOfCenter)
 			{
 				float difference = PosOfCenter - items[i].getYPosition();
 				for (int j = 0; j < items.size(); j++) {
 					items[j].position(startPosX, items[j].getYPosition() + difference);
-					items[j].move(0, 0);
+					//items[j].transfer();
 				}
 			}
 			else {
 				float difference = items[i].getYPosition() - PosOfCenter;
 				for (int j = 0; j < items.size(); j++) {
 					items[j].position(startPosX, items[j].getYPosition() - difference);
-					items[j].move(0, 0);
+					//items[j].transfer();
 				}
 			}
 		}
@@ -98,11 +98,7 @@ void itemOfRoulette::move(float deltaTime, float speed)
 	sprite->move(0, speed * deltaTime);
 	if (sprite->getPosition().y > endOfColumn)
 	{
-		sprite->setPosition(x,  startOfColumn);
-	}
-	else if (sprite->getPosition().y < startOfColumn)
-	{
-		sprite->setPosition(x, endOfColumn);
+		sprite->setPosition(x, startOfColumn + sprite->getPosition().y - endOfColumn);
 	}
 }
 
