@@ -52,6 +52,7 @@ int main()
     sf::Clock clock, scrollTimer, overclockingOfSpeed;
 
     AnimatedButton startButton("images/startButton", 4, sf::Vector2f(810, 100), [&]() {
+        overclockingOfSpeed.restart();
         isRouletteEnabled = true;
         speedOfRoulete1 = distr(gen);
         speedOfRoulete2 = distr(gen);
