@@ -32,6 +32,7 @@ void roulette::render(sf::RenderWindow& window)
 
 void roulette::move(float deltaTime, float speed)
 {
+	this->speed = speed;
 	for (int i = 0; i < items.size(); i++)
 	{
 		items[i].move(deltaTime, speed);
@@ -40,25 +41,30 @@ void roulette::move(float deltaTime, float speed)
 
 int roulette::rouletteIsStopped(float PosOfCenter)
 {
+	this->PosOfCenter = PosOfCenter;
 	for (int i = 0; i < items.size(); i++)
 	{
-		if (items[i].getYPosition() < PosOfCenter + items[i].getSizeOfItem() / 2 + indent / 2 && items[i].getYPosition() > PosOfCenter - items[i].getSizeOfItem() / 2 - indent / 2) {
-			//std::cout << items[i].getName() << " | " << items[i].getXPosition() << " : " << items[i].getYPosition() << std::endl;
-			if (items[i].getYPosition() < PosOfCenter)
-			{
-				float difference = PosOfCenter - items[i].getYPosition();
-				for (int j = 0; j < items.size(); j++) {
-					items[j].position(startPosX, items[j].getYPosition() + difference);
-				}
-			}
-			else {
-				float difference = items[i].getYPosition() - PosOfCenter;
-				for (int j = 0; j < items.size(); j++) {
-					items[j].position(startPosX, items[j].getYPosition() - difference);
-				}
+		if (items[i].getYPosition() <= PosOfCenter && items[i].getYPosition() > PosOfCenter - items[i].getSizeOfItem() - indent) {
+			float difference = PosOfCenter - items[i].getYPosition();
+			for (int j = 0; j < items.size(); j++) {
+				difOfPos = PosOfCenter - items[i].getYPosition();
+				nowDifOfPos = difOfPos;
 			}
 			return items[i].getNumb();
 		}
+	}
+}
+
+void roulette::moveToPoint(float deltaTime, float myspeed, float elapsedTime, float duration)
+{
+	if (nowDifOfPos > 0) {
+		float remainingTime = duration - elapsedTime;
+		speed = (difOfPos / duration) * (elapsedTime / duration);
+		for (int i = 0; i < items.size(); i++)
+		{
+			items[i].move(deltaTime, speed);
+		}
+		nowDifOfPos -= deltaTime * speed;
 	}
 }
 

@@ -10,7 +10,7 @@ const int widthWindow = 960;
 const int heightWindow = 540;
 
 bool isRouletteEnabled = false;
-float timeOfScroll = 2;
+float timeOfScroll = 3.5, duration = 1;
 
 int balance = 0;
 

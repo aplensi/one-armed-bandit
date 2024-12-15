@@ -2,7 +2,8 @@
 
 using namespace std;
 
-void win(int res1, int res2, int res3, int& balance) {
+void win(int res1, int res2, int res3, int& balance, sf::Clock& overclockingOfSpeed) {
+    overclockingOfSpeed.restart();
     if (res1 == res2 && res1 == res3) {
         if (res1 == 1) {
             balance += 1000;
@@ -44,17 +45,20 @@ int main()
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distr(1500, 3000);
-    int speedOfRoulete1;
-    int speedOfRoulete2;
-    int speedOfRoulete3;
+    int speedOfRoulete1, startOfSpeed1 = 0;
+    int speedOfRoulete2, startOfSpeed2 = 0;
+    int speedOfRoulete3, startOfSpeed3 = 0;
 
-    sf::Clock clock, scrollTimer;
+    sf::Clock clock, scrollTimer, overclockingOfSpeed;
 
     AnimatedButton startButton("images/startButton", 4, sf::Vector2f(810, 100), [&]() {
         isRouletteEnabled = true;
         speedOfRoulete1 = distr(gen);
         speedOfRoulete2 = distr(gen);
         speedOfRoulete3 = distr(gen);
+        int startOfSpeed1 = 0;
+        int startOfSpeed2 = 0;
+        int startOfSpeed3 = 0;
         scrollTimer.restart();
         });
 
@@ -66,7 +70,7 @@ int main()
 
     AnimatedButton stopButton("images/stopButton", 4, sf::Vector2f(810, 150), [&]() {
         isRouletteEnabled = false;
-        win(column1.rouletteIsStopped(170), column2.rouletteIsStopped(170), column3.rouletteIsStopped(170), balance);
+        win(column1.rouletteIsStopped(170), column2.rouletteIsStopped(170), column3.rouletteIsStopped(170), balance, overclockingOfSpeed);
         });
 
     // Основной цикл
@@ -101,20 +105,27 @@ int main()
         window.clear();
         if (isRouletteEnabled == true)
         {
-            column1.move(deltaTime, speedOfRoulete1);
-            column2.move(deltaTime, speedOfRoulete2);
-            column3.move(deltaTime, speedOfRoulete3);
+            float elapsedTime = overclockingOfSpeed.getElapsedTime().asSeconds();
+            if (elapsedTime < duration) {
+                startOfSpeed1 = (speedOfRoulete1 / duration) * elapsedTime;
+                startOfSpeed2 = (speedOfRoulete2 / duration) * elapsedTime;
+                startOfSpeed3 = (speedOfRoulete3 / duration) * elapsedTime;
+            }
+            column1.move(deltaTime, startOfSpeed1);
+            column2.move(deltaTime, startOfSpeed2);
+            column3.move(deltaTime, startOfSpeed3);
 
             sf::Time elapsed = scrollTimer.getElapsedTime();
             if (elapsed.asSeconds() >= timeOfScroll) {
                 isRouletteEnabled = false;
-                win(column1.rouletteIsStopped(170), column2.rouletteIsStopped(170), column3.rouletteIsStopped(170), balance);
+                win(column1.rouletteIsStopped(170), column2.rouletteIsStopped(170), column3.rouletteIsStopped(170), balance, overclockingOfSpeed);
             }
         }
         else {
-            speedOfRoulete1 = 0;
-            speedOfRoulete2 = 0;
-            speedOfRoulete3 = 0;
+            float elapsedTime = overclockingOfSpeed.getElapsedTime().asSeconds();
+            column1.moveToPoint(deltaTime, startOfSpeed1, elapsedTime, duration);
+            column2.moveToPoint(deltaTime, startOfSpeed2, elapsedTime, duration);
+            column3.moveToPoint(deltaTime, startOfSpeed3, elapsedTime, duration);
         }
 
         window.clear(sf::Color(242, 204, 143));

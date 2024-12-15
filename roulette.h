@@ -31,9 +31,10 @@ public:
 	void render(sf::RenderWindow& window);
 	void move(float deltaTime, float speed);
 	int rouletteIsStopped(float PosOfCenter);
+	void moveToPoint(float deltaTime, float speed, float elapsedTime, float duration);
 private:
 	int numb, startPosX, startPosY;
-	float speedOfScroll = 0, indent;
+	float speedOfScroll = 0, indent, stopPoint, difOfPos = 0, speed, PosOfCenter, nowDifOfPos, elapsedTime;
 	std::vector<itemOfRoulette> items;
 	std::string path;
 };
